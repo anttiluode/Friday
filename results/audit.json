@@ -1,0 +1,95 @@
+{
+  "environment": {
+    "python": "3.12.14",
+    "numpy": "2.3.5"
+  },
+  "protocol": {
+    "nodes": 30,
+    "eigenvalue_group_tolerance": 1e-08,
+    "rank_tolerance": 1e-08,
+    "finite_time_steps": 80,
+    "dt": 0.37,
+    "evolution": "exp(-i t L)",
+    "measurement": "complex node amplitude",
+    "normalization": "observability stack divided by sqrt(80)",
+    "note": "Ideal deterministic linear-state audit; no learned model or noise trial."
+  },
+  "dark_basis": {
+    "dimension": 15,
+    "eigenvalues": [
+      0.2679491924311226,
+      1.9999999999999998,
+      3.7320508075688776
+    ],
+    "portal_max_residual": 0.0,
+    "orthonormal_max_residual": 4.441279429737991e-16
+  },
+  "configurations": {
+    "rational": {
+      "lambda_min": 0.2679491924311221,
+      "spectral_spread": 5.864203975970763,
+      "repeated_gaps_tol_1e_4": 21,
+      "dark_eigenvector_max_residual": 8.049116928532385e-16,
+      "observable_dimensions": {
+        "portals": 15,
+        "interiors": 27,
+        "both": 30
+      }
+    },
+    "golden": {
+      "lambda_min": 0.2679491924311207,
+      "spectral_spread": 6.129116738378724,
+      "repeated_gaps_tol_1e_4": 12,
+      "dark_eigenvector_max_residual": 8.049116928532385e-16,
+      "observable_dimensions": {
+        "portals": 15,
+        "interiors": 30,
+        "both": 30
+      }
+    },
+    "rational_11": {
+      "lambda_min": 0.26794919243112164,
+      "spectral_spread": 6.176727160390545,
+      "repeated_gaps_tol_1e_4": 12,
+      "dark_eigenvector_max_residual": 8.049116928532385e-16,
+      "observable_dimensions": {
+        "portals": 15,
+        "interiors": 30,
+        "both": 30
+      }
+    }
+  },
+  "same_flux_max_spectral_error": 7.105427357601002e-15,
+  "internal_opening": [
+    {
+      "delta_radians": 0,
+      "observable_dimension": 15,
+      "normalized_sigma_min": 2.1139235016668168e-17,
+      "normalized_sigma_max": 0.9445082113121178
+    },
+    {
+      "delta_radians": 0.0001,
+      "observable_dimension": 30,
+      "normalized_sigma_min": 7.251819363122654e-06,
+      "normalized_sigma_max": 0.9445082113081378
+    },
+    {
+      "delta_radians": 0.01,
+      "observable_dimension": 30,
+      "normalized_sigma_min": 0.0007251755510464285,
+      "normalized_sigma_max": 0.9445081715142879
+    },
+    {
+      "delta_radians": 0.1,
+      "observable_dimension": 30,
+      "normalized_sigma_min": 0.007245364842634464,
+      "normalized_sigma_max": 0.9445042348512264
+    },
+    {
+      "delta_radians": 0.5,
+      "observable_dimension": 30,
+      "normalized_sigma_min": 0.0353608467444427,
+      "normalized_sigma_max": 0.9444109778613513
+    }
+  ]
+}
