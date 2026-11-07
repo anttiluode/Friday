@@ -1,0 +1,140 @@
+{
+  "protocol": {
+    "graph": "Friday golden configuration, plastic edge magnitudes (all 35 edges)",
+    "dynamics": "dx/dt = -iLx - gamma x + drive, steady state",
+    "gamma": 0.2,
+    "sweep": [
+      0.05,
+      6.0,
+      48
+    ],
+    "write_rule": "m += rate*0.48*tanh(|A_p - e^{i theta_pq} A_q|^2/0.25), clip [0.05,3]",
+    "rate": 0.06,
+    "stored_eps": 0.08,
+    "seed": 0
+  },
+  "symmetry": {
+    "S_commutes_with_L": 1.6946818973100074e-15,
+    "S_squared_minus_identity": 1.7421785701966491e-15,
+    "S_fixes_connecting_nodes": true,
+    "dark_modes_are_S_odd": 8.125323285481903e-16,
+    "odd_sector_dimension": 15
+  },
+  "static": {
+    "max_public_difference_over_32_words": 7.137519928003812e-16,
+    "key_decoded_words": "32/32",
+    "min_key_margin": 0.12261705820210456
+  },
+  "public_cannot_write": {
+    "steps": 400,
+    "max_abs_ring_asymmetry": 2.220446049250313e-15,
+    "mean_magnitude_after_raw_traffic": 2.3666230015697356
+  },
+  "key_write": {
+    "node1_write_sign": 1,
+    "words_written_with_correct_signs": "32/32",
+    "words_key_decoded_after_write": "32/32",
+    "min_written_asymmetry": 0.003631101438265949,
+    "crosstalk_into_other_rings": 2.220446049250313e-16,
+    "public_difference_over_32_written_words": 2.066719749385509e-15
+  },
+  "retention": {
+    "none": {
+      "50": {
+        "asym_retained_fraction": 2.6363960534113926,
+        "sign_intact": true,
+        "key_decoded": false,
+        "min_key_margin": 0.001284886054928504,
+        "mean_magnitude": 1.7490718724856826
+      },
+      "200": {
+        "asym_retained_fraction": 0.0,
+        "sign_intact": false,
+        "key_decoded": false,
+        "min_key_margin": 1.669844383649637e-15,
+        "mean_magnitude": 2.991238931480968
+      },
+      "400": {
+        "asym_retained_fraction": 0.0,
+        "sign_intact": false,
+        "key_decoded": false,
+        "min_key_margin": 1.591519686954422e-15,
+        "mean_magnitude": 3.0
+      }
+    },
+    "renormalize": {
+      "50": {
+        "asym_retained_fraction": 1.9619212063181672,
+        "sign_intact": true,
+        "key_decoded": true,
+        "min_key_margin": 0.0010273144625904177,
+        "mean_magnitude": 1.1492389351235162
+      },
+      "200": {
+        "asym_retained_fraction": 0.020912568814455707,
+        "sign_intact": false,
+        "key_decoded": false,
+        "min_key_margin": 0.00020289084721307775,
+        "mean_magnitude": 1.2857142857142858
+      },
+      "400": {
+        "asym_retained_fraction": 0.0035969886248095745,
+        "sign_intact": false,
+        "key_decoded": false,
+        "min_key_margin": 2.3100536009215404e-07,
+        "mean_magnitude": 1.2857142857142858
+      }
+    },
+    "pull": {
+      "50": {
+        "asym_retained_fraction": 0.387633881024795,
+        "sign_intact": true,
+        "key_decoded": true,
+        "min_key_margin": 0.00025189301464834476,
+        "mean_magnitude": 1.2554811360735176
+      },
+      "200": {
+        "asym_retained_fraction": 1.4234605072719537e-05,
+        "sign_intact": false,
+        "key_decoded": false,
+        "min_key_margin": 5.69212288711643e-08,
+        "mean_magnitude": 1.2706383778556913
+      },
+      "400": {
+        "asym_retained_fraction": 1.5608440629626294e-11,
+        "sign_intact": false,
+        "key_decoded": false,
+        "min_key_margin": 8.008266658990118e-12,
+        "mean_magnitude": 1.3306762051919316
+      }
+    }
+  },
+  "flipflop": {
+    "rule": "multiplicative write, twin competition beta, ring renormalization, floor",
+    "beta": 1.05,
+    "floor": 0.2,
+    "words_retained_after_300_public_writes": "16/16",
+    "ring0_rewritten_by_key_with_lock_open": "16/16",
+    "median_key_writes_to_flip": 168.5,
+    "new_word_intact_after_150_more_public_writes": "16/16",
+    "symmetric_start_asymmetry_after_400_public_writes": 7.476326746580497e-08,
+    "ring0_twin_magnitudes_after_lock": [
+      [
+        1.891,
+        0.2
+      ],
+      [
+        1.916,
+        0.2
+      ],
+      [
+        1.66,
+        0.2
+      ]
+    ]
+  },
+  "public_future": {
+    "steps": 100,
+    "max_port_difference_word0_vs_word31": 4.819681085508652e-15
+  }
+}

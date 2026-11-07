@@ -55,6 +55,53 @@ With golden outer phases fixed, add the same offset δ to the first internal edg
 
 The observation stack is divided by √80. Full rank is not a noise-performance result: the weakest visible direction can still be extremely weak. These results specify complex amplitudes and ideal unitary evolution; they do not apply unchanged to intensity-only sensors, diffusion, or unknown material parameters.
 
+## Writing behind the mirror (added 7 November 2026)
+
+*Follow-up that couples Friday with [SliderV3](https://github.com/anttiluode/SliderV3)'s wave-written edges. Full derivation and every caveat: [docs/mirror-lock.md](docs/mirror-lock.md). Code: [mirror_lock.py](mirror_lock.py).*
+
+**Why the 15 modes are dark.** Each ring has a *gauge reflection*: reflect node j to −j about its connecting node, then apply the fixed phases (1, e^{iπ/3}, e^{2iπ/3}, −1, e^{−2iπ/3}, e^{−iπ/3}). Call the product over the five rings S. It commutes with L (residual 1.7e-15), squares to the identity, and leaves all five connecting nodes untouched. Its −1 eigenspace has dimension 15 and contains every analytic dark mode (residual 8e-16). The dark modes are exactly the mirror-odd sector. A connecting node is fixed by the mirror, so it reads zero on anything mirror-odd.
+
+**The same argument applies to weights, not just states.** Make the 35 edge magnitudes plastic. Store one bit per ring as the sign of its mirror-antisymmetric weight pattern (one twin edge stronger than its reflection). A ring holding bit 1 and a ring holding bit 0 are then mirror images, related by an operator that fixes every connecting node. Three things follow exactly, for any drive applied only at connecting nodes and any gauge-covariant local write rule:
+
+1. **Public reads cannot see the word.** Every port response is identical at every frequency.
+2. **Public writes cannot create a bit.** A mirror-symmetric ring stays symmetric forever.
+3. **The whole public future is word-independent.** All 32 stored words produce identical port histories under identical public traffic, including the writes that traffic causes.
+
+An interior **key** breaks the tie. It reads by *driving publicly and listening privately*: drive the connecting node, compare power at the two interior twins (nodes 1 and 5), and take the sign of the band-averaged contrast. It writes by driving one interior twin.
+
+Measured on Friday's golden configuration, with steady-state damped dynamics (γ = 0.2) and a gauge-covariant version of SliderV3's Fourier write rule:
+
+| Test | Result |
+|---|---|
+| Port difference across all 32 stored words (ε = 0.08) | 7e-16 |
+| Key decodes the stored word | 32/32, minimum margin 0.12 |
+| 400 random public writes into a symmetric graph: largest ring asymmetry | 2e-15 (exactly zero up to roundoff) |
+| Key writes 32 words into a blank graph, correct signs / decoded | 32/32 / 32/32 |
+| Crosstalk of a key write into the other four rings | 2e-16 |
+| Port difference, word 00000 vs 11111, over 100 steps of shared public read-and-write traffic | 5e-15 |
+
+**Retention is where it gets hard.** The public cannot read or create a bit, but it *can erase* one. Erasing means driving the ring toward symmetric, and that is mirror-symmetric too. With SliderV3's additive rule, every stored word had decayed within 200 public writes, whether homeostasis was absent (edges saturate at the clip), multiplicative renormalization (additive increments dilute the twin ratio), or additive pull (decays to the symmetric base). This is Friday's point 4 again, now for structure.
+
+**What fixed it: a mirror flip-flop.** Three changes, each of which commutes with S:
+
+- writes become multiplicative, `m ← m·(1 + rate·E)`, so uniform exposure preserves the twin ratio;
+- mild competition between mirror twins, `m ← m^β` rescaled to conserve the pair sum, with β = 1.05;
+- per-ring renormalization, plus a floor of 0.2 on every magnitude.
+
+| Flip-flop test (β = 1.05, floor 0.2) | Result |
+|---|---|
+| Words retained after 300 random public writes | 16/16 |
+| Ring 0 rewritten by key drives with competition switched off (β = 1) | 16/16, median 168 key writes |
+| New word intact after re-locking and 150 more public writes | 16/16 |
+| Ring 0 twins after locking | (1.89, 0.20), (1.92, 0.20), (1.66, 0.20): one branch strong, its mirror at the floor |
+
+**Honest limits.**
+
+- The locked state is *pruning*: one side of the ring goes to the floor. That is effective and biologically familiar (competing sibling branches), but blunt.
+- Rewriting is slow (about 170 key writes), and it needs competition to be switched off. With β = 1.1 the flip happened but did not survive re-locking (0/16).
+- β > 1 makes the symmetric state unstable. Starting exactly symmetric, roundoff grew from 1e-15 to 7e-8 over 400 public writes. In any physical device, noise and fabrication asymmetry would write random bits, and fabrication asymmetry would also leak the word to the ports. The exactness here belongs to an ideal mirror.
+- "Symmetry about the input nodes makes a network uncontrollable and unobservable" is established control theory (Rahmani, Ji, Mesbahi and Egerstedt, *SIAM J. Control Optim.* 2009). What this repository adds is narrow: the payload lives in plastic weights, so the plasticity rule inherits the blindness, and a bistable twin rule turns the hidden sector into storage. No capacity, noise or efficiency claim is made.
+
 ## Reproduce
 
 Python 3.10+ and NumPy; CPU only. From this directory:
@@ -62,6 +109,7 @@ Python 3.10+ and NumPy; CPU only. From this directory:
 ```bash
 python -m pip install -r requirements.txt
 python audit.py --output results/audit.json
+python mirror_lock.py --output results/mirror_lock.json   # ~20 s
 python -m unittest -v
 ```
 
@@ -74,6 +122,10 @@ Files:
 - [test_audit.py](test_audit.py): five regression tests covering the mathematical claims and agreement with the supplied script.
 - [original/magnetic.py](original/magnetic.py): the supplied script, preserved as a historical reference. Its “σ_min proxy” label is not an observability measurement.
 - [results/audit.json](results/audit.json): measured values, including residuals.
+- [docs/mirror-lock.md](docs/mirror-lock.md): the mirror symmetry behind the dark modes, and the plastic-weight lock.
+- [mirror_lock.py](mirror_lock.py): the 7 Nov experiment (exact invisibility, key read and write, retention, flip-flop).
+- [test_mirror_lock.py](test_mirror_lock.py): five fast regression tests for those claims.
+- [results/mirror_lock.json](results/mirror_lock.json): the measured values in the tables above.
 
 ## The points worth carrying forward
 
@@ -81,6 +133,6 @@ Files:
 2. **Access belongs to the system plus its permitted operations.** More frequencies do not reveal a mode that is dark at every frequency. A suitable change in coupling can.
 3. **Being distinct, being observable, and being robustly readable are separate properties.** Rank addresses only part of the problem.
 4. **Isolation is not retention.** These modes persist in ideal unitary dynamics, but decay under `dx/dt = -Lx`. Their hiddenness alone supplies no durable memory.
-5. **A useful memory needs a controlled path between protection and access.** Opening a path is demonstrated here; writing, retaining, and retrieving a payload without unacceptable disturbance are not.
+5. **A useful memory needs a controlled path between protection and access.** Opening a path is demonstrated here; writing, retaining, and retrieving a payload without unacceptable disturbance are not. (A first, idealized attempt: *Writing behind the mirror*, above.)
 
 Research note prepared with ChatGPT assistance from Antti Luode's discussion and supplied experiment, 6 November 2026. No specific model identity or authorship connection to the external π manuscript is claimed. MIT license; external references retain their own terms.
